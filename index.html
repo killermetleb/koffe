@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kofe içək?</title>
+<style>
+:root{--bg:#f3e6d6;--ink:#3b2418;--yes:#2f7d5b;--no:#8a6a58;--card:#fff8ef;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1e1410;--ink:#f3e6d6;--yes:#3fa377;--no:#a8846f;--card:#2a1c16}}
+:root[data-theme="dark"]{--bg:#1e1410;--ink:#f3e6d6;--yes:#3fa377;--no:#a8846f;--card:#2a1c16}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;display:flex;align-items:center;justify-content:center;overflow:hidden}
+main{text-align:center;padding:24px;width:100%;max-width:520px}
+.cup{line-height:1}#hk{transition:transform .3s}#pick{display:none;margin-top:8px}#pick input{font:inherit;font-size:18px;padding:12px 14px;border-radius:14px;border:2px solid var(--no);background:var(--card);color:var(--ink);margin:6px;max-width:100%}#send{display:inline-block;background:var(--yes);color:#fff;text-decoration:none;border-radius:999px;font-size:19px;padding:14px 28px;margin-top:10px}
+h1{font-size:clamp(28px,8vw,40px);margin:12px 0 6px;line-height:1.15}
+p{margin:0 0 28px;opacity:.75;font-size:18px}
+.row{display:flex;align-items:center;justify-content:center;gap:14px;min-height:40vh;flex-wrap:wrap}
+button{font-family:inherit;border:0;border-radius:999px;cursor:pointer;color:#fff;transition:all .25s ease;white-space:nowrap}
+#yes{background:var(--yes);font-size:20px;padding:14px 32px}
+#no{background:var(--no);font-size:20px;padding:14px 32px}
+#msg{min-height:1.4em;margin-top:8px;font-size:16px;opacity:.8}
+.done h1{font-size:clamp(30px,9vw,46px)}
+.steam{animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.steam{animation:none}button{transition:none}}
+</style>
+</head>
+<body>
+<main id="app">
+  <div class="cup steam" id="cup"><svg id="hk" viewBox="0 0 200 170" width="170" height="145" aria-label="Kofe"><g fill="none" stroke="var(--ink)" stroke-width="5" stroke-linecap="round" opacity=".55"><path d="M75 40c-10-12 10-18 0-32"/><path d="M100 40c-10-12 10-18 0-32"/><path d="M125 40c-10-12 10-18 0-32"/></g><ellipse cx="100" cy="150" rx="88" ry="12" fill="var(--ink)" opacity=".15"/><path d="M42 58h116v42c0 32-22 50-58 50s-58-18-58-50z" fill="var(--yes)"/><path d="M158 72h14a18 18 0 0 1 0 38h-16" fill="none" stroke="var(--yes)" stroke-width="10"/><ellipse cx="100" cy="58" rx="58" ry="10" fill="#4a2c1a"/><ellipse cx="100" cy="58" rx="46" ry="6" fill="#7a4a2b"/><path d="M60 92h80" stroke="#fff" stroke-width="4" opacity=".35" stroke-linecap="round"/></svg></div>
+  <h1 id="title">Mənimlə kofe içməyə gələrsən?</h1>
+  <p id="sub">Mən qismət edim.</p>
+  <div class="row" id="row">
+    <button id="yes">Hə</button>
+    <button id="no">Yox</button>
+  </div>
+  <div id="msg"></div>
+  <div id="pick"><div><input type="date" id="d" aria-label="Tarix"><input type="time" id="t" value="18:00" aria-label="Saat"></div><a id="send" href="#" target="_blank" rel="noopener">WhatsApp-a göndər</a></div>
+</main>
+<script>
+var yes=document.getElementById('yes'),no=document.getElementById('no'),msg=document.getElementById('msg');
+var yS=20,yP=32,nS=20,nP=32,count=0;
+var lines=["Bir də fikirləş 🥺","Kofe çox dadlıdır ha","Xahiş edirəm…","Bəlkə də hə?","Səni gözləyirəm, gəl də 😅","Artıq hə-dən başqa yol yoxdur"];
+function apply(){
+  yes.style.fontSize=yS+'px';yes.style.padding=(yS*.7)+'px '+(yS*1.6)+'px';
+  no.style.fontSize=nS+'px';no.style.padding=(nS*.7)+'px '+(nS*1.6)+'px';
+}
+function shrink(e){
+  if(e)e.preventDefault();
+  count++;
+  yS=Math.min(yS*1.25,160);
+  nS=Math.max(nS*.8,2);
+  msg.textContent=lines[Math.min(count-1,lines.length-1)];
+  apply();
+  if(nS<=2.5){no.style.visibility='hidden'}
+}
+no.addEventListener('click',shrink);
+no.addEventListener('touchstart',shrink,{passive:false});
+var months=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
+var d=document.getElementById('d'),t=document.getElementById('t');
+var n=new Date();d.min=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');
+yes.addEventListener('click',function(){
+  document.getElementById('app').classList.add('done');
+  document.getElementById('title').textContent='Yaşasın! Nə vaxt görüşək? 🎉';
+  document.getElementById('sub').textContent='Tarix və saatı seç';
+  document.getElementById('row').style.display='none';
+  msg.textContent='';
+  document.getElementById('hk').style.transform='scale(1.25)';
+  document.getElementById('pick').style.display='block';
+});
+var send=document.getElementById('send');
+function upd(){
+  if(!d.value||!t.value){send.href='#';return}
+  var p=d.value.split('-');
+  var text='Hə razıyam ☕ Tarix: '+parseInt(p[2],10)+' '+months[parseInt(p[1],10)-1]+' '+p[0]+', saat '+t.value;
+  send.href='https://wa.me/994514538953?text='+encodeURIComponent(text);
+}
+d.addEventListener('input',upd);d.addEventListener('change',upd);
+t.addEventListener('input',upd);t.addEventListener('change',upd);
+send.addEventListener('click',function(e){
+  upd();
+  if(!d.value||!t.value){e.preventDefault();msg.textContent='Əvvəlcə tarix və saatı seç 🙂'}
+});
+apply();
+</script>
+</body>
+</html>
